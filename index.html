@@ -1,1 +1,342 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { BookOpen, User, CalendarDays, FileText, Award, Layers, CheckCircle2, ExternalLink } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+/**
+ * FIX: Removed duplicated import/component block that caused
+ * "Identifier 'React' has already been declared".
+ *
+ * TESTS: Dev‑only self‑tests validate:
+ *  - Weeks = 8
+ *  - Modules = 7
+ *  - Grading sums to 100 and each item is 0–100
+ *  - No accidental email exposure (no '@' or 'mailto:')
+ *  - HERO_IMG uses https
+ *  - NAME/TAGLINE are set
+ *  - Portfolio component is defined
+ */
+
+// --- Content (from CV + course brochure; email intentionally omitted) ---
+const NAME = "Victor Meza";
+const TAGLINE = "B.S. Candidate, International Agriculture Development — UC Davis";
+const LOCATION = "Based in Davis, CA";
+const HERO_IMG = "https://github.com/OliveN-hub/graph-ai-portfolio/blob/main/Photo%20on%2030-07-2025%20at%2015.43%20%232.jpg?raw=true"; // provided by user
+
+const bio = `I’m an undergraduate focused on international agriculture development who’s learning how to apply generative AI to real research and day‑to‑day workflows. I’ve supported community health operations at the Knights Landing One Health Center and I run an online shop (Plants4You) with 500+ sales, where I manage propagation, inventory and fulfillment. I’m fluent in spoken Tagalog and comfortable with Microsoft Office. I’m currently enrolled in the “Generative AI for Work & Research” live cohort to accelerate analysis, literature workflows, and scientific communication.`;
+
+const experience = [
+  {
+    role: "Volunteer, Knights Landing One Health Center",
+    time: "Oct 2022 – Present",
+    points: [
+      "Sanitize exam rooms and restock supplies between appointments to support patient flow.",
+      "Set up reception systems (computers/printers) and follow verification procedures for accurate check‑ins.",
+      "Serve as Tagalog interpreter for patients and medical students to ensure clear communication.",
+    ],
+  },
+  {
+    role: "Shop Owner, Plants4You (Etsy)",
+    time: "Jun 2019 – Present",
+    points: [
+      "500+ sales and $5,700+ revenue; propagate 100+ plants and monitor health (irrigation, pruning, pests).",
+      "Maintain inventory and shipping logistics in Excel; reduced shipping costs by ~15%.",
+    ],
+  },
+];
+
+const courseSummary = {
+  title: "Generative AI for Work & Research (8‑week live cohort)",
+  intro:
+    "A guided, hands‑on program covering LLM fundamentals, no‑code website/docs creation, AI‑assisted data analysis, text/literature workflows, custom GPTs & chatbots, task automation, communication & outreach, and a capstone showcase.",
+  features: [
+    "Weekly live workshops & help sessions",
+    "Private community + personalized feedback",
+    "Capstone coaching & public showcase",
+    "Shareable certificate",
+    "Lifetime access to tutorial library",
+  ],
+  grading: [
+    { label: "Online quizzes", value: 15 },
+    { label: "Workshop assignments", value: 35 },
+    { label: "Attendance & participation", value: 10 },
+    { label: "Final project", value: 40 },
+  ],
+  policy: "Passing grade: 80%. Attend at least 5 workshops for full attendance credit.",
+};
+
+const modules = [
+  { title: "Websites, Documents & Presentations", details: "How LLMs work; generate Markdown/LaTeX/HTML; build simple research websites; use Markdown efficiently; AI tools for slides/posters." },
+  { title: "AI‑Automated Data Analysis", details: "Use ChatGPT Code Interpreter and Julius; build automated dashboards; process/transform datasets; spreadsheet automations; visualizations & reports." },
+  { title: "GenAI for Research & Text Analysis", details: "Efficient literature reviews (Elicit/LiteRev); text classification; sentiment analysis; knowledge maps; summarization pipelines; information synthesis." },
+  { title: "Custom GPTs & Chatbots", details: "Chat architecture, context windows & RAG; custom GPTs; Botpress chatbots; integrate knowledge bases with your research materials." },
+  { title: "AI for Task Automation", details: "Agent‑based systems; email/response automations; browser control agents; orchestration of multi‑step workflows." },
+  { title: "GenAI for Communication & Outreach", details: "AI‑generated research summaries, figures/diagrams, video abstracts; prompt engineering for visualization; content scheduling." },
+  { title: "Capstone Project & Showcase", details: "Progress checks, peer feedback, final presentation, and public Q&A." },
+];
+
+const weeks = Array.from({ length: 8 }, (_, i) => ({
+  week: i + 1,
+  title: `Week ${i + 1}`,
+  description: "Submission coming soon.",
+}));
+
+// --- Dev self‑tests (console only) ---
+function runSelfTests() {
+  const sum = courseSummary.grading.reduce((a, b) => a + (b?.value || 0), 0);
+  const eachValid = courseSummary.grading.every(g => Number.isFinite(g.value) && g.value >= 0 && g.value <= 100);
+  const contentBlob = JSON.stringify({ bio, experience, courseSummary, modules, weeks, NAME, TAGLINE, HERO_IMG });
+  const httpsOk = (() => { try { return new URL(HERO_IMG).protocol === "https:"; } catch { return false; } })();
+  const weekTitlesOk = weeks.every((w, i) => w.title === `Week ${i + 1}`);
+  const tests = [
+    { name: "Weeks count is 8", pass: weeks.length === 8 },
+    { name: "Modules count is 7", pass: modules.length === 7 },
+    { name: "Grading sums to 100", pass: sum === 100 },
+    { name: "Grading values are 0–100", pass: eachValid },
+    { name: "No '@' characters in content", pass: !contentBlob.includes("@") },
+    { name: "No 'mailto:' present", pass: !contentBlob.toLowerCase().includes("mailto:") },
+    { name: "HERO_IMG uses https", pass: httpsOk },
+    { name: "NAME & TAGLINE set", pass: !!NAME?.trim() && !!TAGLINE?.trim() },
+    { name: "Experience has items & points", pass: Array.isArray(experience) && experience.length >= 2 && experience.every(e => Array.isArray(e.points) && e.points.length > 0) },
+    { name: "Week titles are sequential", pass: weekTitlesOk },
+    { name: "Portfolio component defined", pass: typeof Portfolio === "function" },
+  ];
+  const failed = tests.filter(t => !t.pass);
+  if (failed.length) {
+    // eslint-disable-next-line no-console
+    console.groupCollapsed("\u26A0\uFE0F Portfolio self‑tests: FAIL");
+    failed.forEach(t => console.error(`✗ ${t.name}`));
+    tests.filter(t => t.pass).forEach(t => console.info(`✓ ${t.name}`));
+    console.groupEnd();
+  } else {
+    // eslint-disable-next-line no-console
+    console.groupCollapsed("✅ Portfolio self‑tests: PASS");
+    tests.forEach(t => console.info(`✓ ${t.name}`));
+    console.groupEnd();
+  }
+}
+
+const ENV = (typeof process !== "undefined" && process?.env?.NODE_ENV) || "development";
+if (typeof window !== "undefined" && ENV !== "production") {
+  try { runSelfTests(); } catch { /* no‑op */ }
+}
+
+// --- Small utilities ---
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.5 } }),
+};
+
+const Section = ({ id, children, className = "" }) => (
+  <section id={id} className={`scroll-mt-24 py-16 ${className}`}>{children}</section>
+);
+
+export default function Portfolio() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-sky-100 text-neutral-900">
+      {/* Nav */}
+      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-neutral-200">
+        <nav className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <a href="#top" className="font-semibold tracking-tight text-lg">{NAME}</a>
+          <div className="hidden sm:flex items-center gap-6 text-sm">
+            <a href="#about" className="hover:text-neutral-600">About me</a>
+            <a href="#course" className="hover:text-neutral-600">About the course</a>
+            <a href="#submissions" className="hover:text-neutral-600">Weekly submissions</a>
+          </div>
+        </nav>
+      </header>
+
+      {/* Split Hero inspired by reference */}
+      <div id="top" className="relative">
+        <div className="grid md:grid-cols-2">
+          {/* Left: image with name plate */}
+          <div className="relative h-[440px] md:h-[520px]" data-testid="hero-left">
+            <img
+              src={HERO_IMG}
+              alt="Portrait headshot of Victor Meza"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+              loading="eager"
+              fetchPriority="high"
+            />
+            <div className="absolute left-6 right-6 bottom-6 bg-white/95 backdrop-blur rounded-xl shadow-lg p-6">
+              <h1 className="text-3xl sm:text-4xl font-semibold leading-tight">{NAME}</h1>
+              <p className="mt-1 text-neutral-700">{TAGLINE}</p>
+              <p className="text-neutral-500 text-sm">{LOCATION}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Badge className="bg-sky-600 text-white hover:bg-sky-600">No‑Code · Data · Text</Badge>
+                <Badge variant="secondary">Custom GPTs</Badge>
+                <Badge variant="secondary">Automation</Badge>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: About-me card on a soft blue panel */}
+          <div className="bg-sky-100/60 border-l border-sky-200">
+            <div className="mx-auto max-w-2xl px-6 md:px-10 py-10 md:py-14">
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-300 bg-white px-3 py-1 text-xs text-neutral-600">
+                <Layers className="h-3.5 w-3.5"/>
+                <span>Generative AI for Work & Research</span>
+              </div>
+
+              <h2 className="mt-6 text-2xl font-semibold tracking-tight">About Me</h2>
+              <div className="mt-2 h-[1px] w-full bg-sky-300"/>
+              <p className="mt-4 text-neutral-800 leading-relaxed">{bio}</p>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href="#about" className="inline-flex items-center justify-center rounded-xl border border-sky-400 bg-white px-4 py-2 text-sm font-semibold hover:bg-sky-50">
+                  Resume / CV
+                </a>
+                <a href="#submissions" className="inline-flex items-center justify-center rounded-xl border border-sky-400 bg-white px-4 py-2 text-sm font-semibold hover:bg-sky-50">
+                  Course portfolio
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* About me (detailed) */}
+      <Section id="about" className="bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="md:col-span-2">
+              <h3 className="text-xl font-semibold tracking-tight flex items-center gap-2"><User className="h-5 w-5"/> Experience</h3>
+              <p className="mt-3 text-neutral-700">Below are selected highlights from my CV.</p>
+              <div className="mt-6 grid gap-6">
+                {experience.map((e, idx) => (
+                  <Card key={idx}>
+                    <CardHeader>
+                      <CardTitle className="text-base">{e.role}</CardTitle>
+                      <CardDescription>{e.time}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="list-disc pl-5 space-y-1 text-sm text-neutral-700">
+                        {e.points.map((p, i) => (<li key={i}>{p}</li>))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={1}>
+              <Card className="bg-gradient-to-br from-sky-50 to-white border-sky-200">
+                <CardHeader>
+                  <CardTitle>Quick facts</CardTitle>
+                  <CardDescription>At a glance</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm text-neutral-700">
+                  <p><span className="font-medium">Focus:</span> International Agriculture Development</p>
+                  <p><span className="font-medium">Interests:</span> AI for research, data analysis, communication</p>
+                  <p><span className="font-medium">Languages:</span> English, Tagalog (spoken)</p>
+                  <p><span className="font-medium">Tools:</span> Microsoft Office, spreadsheets, dashboards</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Course */}
+      <Section id="course" className="bg-gradient-to-b from-white to-sky-50">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-6 w-6"/>
+            <h2 className="text-2xl font-semibold tracking-tight">About the course</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="md:col-span-2 border-sky-200">
+              <CardHeader>
+                <CardTitle>{courseSummary.title}</CardTitle>
+                <CardDescription>{courseSummary.intro}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <p className="font-medium mb-2 flex items-center gap-2"><CheckCircle2 className="h-4 w-4"/> Bootcamp features</p>
+                  <ul className="grid sm:grid-cols-2 gap-2 list-disc pl-5 text-neutral-700">
+                    {courseSummary.features.map((f, i) => (<li key={i}>{f}</li>))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="font-medium mb-2 flex items-center gap-2"><Award className="h-4 w-4"/> Grading</p>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {courseSummary.grading.map((g, i) => (
+                      <div key={i} className="flex items-center justify-between rounded-lg border border-sky-200 p-3 text-sm">
+                        <span>{g.label}</span>
+                        <span className="font-medium">{g.value}%</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-2 text-sm text-neutral-600">{courseSummary.policy}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-4">
+              {modules.map((m, idx) => (
+                <Card key={idx} className="border-sky-200">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Module {idx + 1}: {m.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-neutral-700">{m.details}</p>
+                  </CardContent>
+                </Card>
+              ))}
+
+              <a
+                href="https://thegraphcourses.org"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium underline hover:no-underline"
+              >
+                Explore the program site <ExternalLink className="h-4 w-4"/>
+              </a>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* Weekly submissions */}
+      <Section id="submissions" className="bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2">
+            <CalendarDays className="h-6 w-6"/>
+            <h2 className="text-2xl font-semibold tracking-tight">My weekly submissions</h2>
+          </div>
+          <p className="mt-2 text-neutral-600">Links will appear below as I publish each week’s work.</p>
+
+          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {weeks.map((w) => (
+              <Card key={w.week} className="border-sky-200">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">{w.title}</CardTitle>
+                  <CardDescription>{w.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="secondary" className="w-full" aria-disabled>
+                    <FileText className="h-4 w-4 mr-2"/> View submission
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* Footer */}
+      <footer className="border-t border-neutral-200 bg-sky-50/50">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 text-sm text-neutral-600">
+          <p>
+            © {new Date().getFullYear()} {NAME}. This page intentionally omits email to reduce spam. For inquiries, please use a contact form or messaging platform you prefer.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
 
