@@ -21,7 +21,7 @@
       --radius-sm: 12px;
       --radius-xs: 10px;
     }
-    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--sky-50),#fff,var(--sky-100));color:var(--text);}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,var(--sky-50),#fff,var(--sky-100));color:var(--text);}  
     body{font: 16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;}
     a{color:inherit;text-decoration:none}
     .container{max-width:1120px;margin:auto;padding:0 1rem}
@@ -46,7 +46,7 @@
     .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--sky-200);background:#fff;border-radius:999px;padding:6px 10px;color:#334155;font-size:12px}
     .rule{margin-top:12px;height:1px;background:var(--sky-200)}
     .cta-row{margin-top:16px;display:flex;flex-wrap:wrap;gap:12px}
-    .btn{appearance:none;border:1px solid var(--sky-200);background:#fff;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+    .btn{appearance:none;border:1px solid var(--sky-200);background:#fff;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
     .btn:hover{background:var(--sky-50)}
 
     /* Sections */
@@ -220,7 +220,19 @@
         <div class="grid cols-4" style="margin-top:16px" id="weeks">
           <!-- 8 placeholder cards -->
           <div class="card" data-week="1"><div class="head"><h4 class="card-title">Week 1</h4><div class="desc">Submission coming soon.</div></div><div class="body"><button class="btn" disabled aria-disabled="true" style="width:100%">View submission</button></div></div>
-          <div class="card" data-week="2"><div class="head"><h4 class="card-title">Week 2</h4><div class="desc">Submission coming soon.</div></div><div class="body"><button class="btn" disabled aria-disabled="true" style="width:100%">View submission</button></div></div>
+
+          <!-- UPDATED: Week 2 now shows Workshop 2 project -->
+          <div class="card" data-week="2">
+            <div class="head">
+              <h4 class="card-title">Week 2</h4>
+              <div class="desc">Workshop 2: Automated Data Analysis</div>
+            </div>
+            <div class="body">
+              <p class="small muted" style="margin-top:0">Analyzed Gapminder data to explore relationships between two global indicators using AI tools.</p>
+              <a class="btn" style="width:100%" target="_blank" rel="noopener noreferrer" href="https://github.com/OliveN-hub/graph-ai-portfolio/blob/main/Comprehensive%20Report_%20Relationship%20Between%20Internet%20Usage%20and%20Happiness%20Scores%20(2023)%20(1).pdf">View report (PDF)</a>
+            </div>
+          </div>
+
           <div class="card" data-week="3"><div class="head"><h4 class="card-title">Week 3</h4><div class="desc">Submission coming soon.</div></div><div class="body"><button class="btn" disabled aria-disabled="true" style="width:100%">View submission</button></div></div>
           <div class="card" data-week="4"><div class="head"><h4 class="card-title">Week 4</h4><div class="desc">Submission coming soon.</div></div><div class="body"><button class="btn" disabled aria-disabled="true" style="width:100%">View submission</button></div></div>
           <div class="card" data-week="5"><div class="head"><h4 class="card-title">Week 5</h4><div class="desc">Submission coming soon.</div></div><div class="body"><button class="btn" disabled aria-disabled="true" style="width:100%">View submission</button></div></div>
